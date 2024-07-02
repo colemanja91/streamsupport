@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class OverlayConfig(AppConfig):
+class HaloinfiniteConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'overlay'
+    name = 'haloinfinite'
