@@ -9,6 +9,7 @@ cffi==1.16.0
 charset-normalizer==3.3.2
 cryptography==42.0.8
 Django==5.0.6
+django-annoying==0.10.6
 frozenlist==1.4.1
 idna==3.7
 msal==1.29.0
