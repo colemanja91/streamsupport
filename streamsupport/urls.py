@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from haloinfinite.views import MatchListView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('haloinfinite/matches/', MatchListView.as_view())
 ]
