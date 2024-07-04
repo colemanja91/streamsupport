@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from os import getenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'haloinfinite.apps.HaloinfiniteConfig'
 ]
 
 MIDDLEWARE = [
@@ -75,8 +77,12 @@ WSGI_APPLICATION = 'streamsupport.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'streamsupport_development',
+        'USER': getenv('STREAMSUPPORT_DB_USER'),
+        'PASSWORD': getenv('STREAMSUPPORT_DB_PASSWORD'),
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
     }
 }
 
@@ -105,9 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'EST'
 
-USE_I18N = True
+USE_I18N = False
 
 USE_TZ = True
 
@@ -121,3 +127,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Load environment variables for use
+MSAL_CLIENT_ID = getenv('MSAL_CLIENT_ID')
+MSAL_CLIENT_SECRET = getenv('MSAL_CLIENT_SECRET')
+MSAL_REDIRECT_URI = "http://localhost"
