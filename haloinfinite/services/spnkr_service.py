@@ -1,7 +1,9 @@
 from django.conf import settings
+from haloinfinite.models import Match, PlaylistAsset
 
 from asgiref.sync import sync_to_async
 from aiohttp import ClientSession
+from aiohttp.client_exceptions import ClientResponseError
 from datetime import datetime, timedelta
 from spnkr import AzureApp, HaloInfiniteClient, authenticate_player, refresh_player_tokens
 
@@ -63,3 +65,107 @@ class SpnkrService:
       self.servicerecord.matches_completed=parsed.matches_completed
       self.servicerecord.time_played=parsed.time_played
       await self.servicerecord.asave()
+  
+  async def refresh_matches(self) -> None:
+    await self.refresh_tokens()
+
+    async with ClientSession() as session:
+      client = HaloInfiniteClient(
+        session=session,
+        spartan_token=self.xbox_user.spartan_token,
+        clearance_token=self.xbox_user.clearance_id,
+        requests_per_second=5
+      )
+
+      index = 0
+      increment = 25
+      has_more = True
+      results = []
+
+      while has_more:
+        response = await client.stats.get_match_history(
+          self.xbox_user.xuid,
+          start=index,
+          count=increment,
+          match_type='matchmaking'
+        )
+
+        parsed = await response.parse()
+        results.extend(parsed.results)
+
+        print(f"Retrieved {len(results)} matches")
+
+        index += increment
+        if parsed.result_count < increment:
+          has_more = False
+      
+      for result in results:
+        playlist_asset, _playlist_asset_created = await PlaylistAsset.objects.aget_or_create(
+          external_id=result.match_info.playlist.asset_id,
+          version_external_id=result.match_info.playlist.version_id
+        )
+
+        await Match.objects.aget_or_create(
+          xbox_user=self.xbox_user,
+          external_id=result.match_id,
+          outcome=result.outcome.value,
+          rank=result.rank,
+          start_time=result.match_info.start_time,
+          end_time=result.match_info.end_time,
+          game_variant=result.match_info.game_variant_category.value,
+          level_external_id=result.match_info.level_id,
+          playlist_asset=playlist_asset,
+          season_external_id=result.match_info.season_id
+        )
+
+  async def refresh_match_stats(self, matches) -> None:
+    await self.refresh_tokens()
+
+    async with ClientSession() as session:
+      client = HaloInfiniteClient(
+        session=session,
+        spartan_token=self.xbox_user.spartan_token,
+        clearance_token=self.xbox_user.clearance_id,
+        requests_per_second=5
+      )
+
+      for match in matches:
+        try:
+          response = await client.stats.get_match_stats(match_id=match.external_id)
+          parsed = await response.parse()
+          player_stats = [player for player in parsed.players if (player.player_id == f"xuid({self.xbox_user.xuid})")][0]
+          stats = player_stats.player_team_stats[0].stats.core_stats
+
+          match.rounds_won = stats.rounds_won
+          match.rounds_lost = stats.rounds_lost
+          match.rounds_tied = stats.rounds_tied
+          match.kills = stats.kills
+          match.deaths = stats.deaths
+          match.assists = stats.assists
+          match.callout_assists = stats.callout_assists
+          match.score = stats.score
+          match.max_killing_spree = stats.max_killing_spree
+          match.accuracy = stats.accuracy
+
+          print(f"Retrieved stats for match {match.external_id}")
+        except ClientResponseError:
+          print(f"Could not get match stats for {match.external_id}")
+          next
+        
+        try:
+          response = await client.skill.get_match_skill(match_id=match.external_id, xuids=[self.xbox_user.xuid])
+          parsed = await response.parse()
+          skill = parsed.value[0].result.rank_recap
+
+          match.pre_match_csr = skill.pre_match_csr.value
+          match.post_match_csr = skill.post_match_csr.value
+          await match.asave()
+        except ClientResponseError:
+          print(f"Could not get match skill for {match.external_id}")
+          next
+        
+        match.stats_retrieved = True
+        await match.asave()
+
+
+        
