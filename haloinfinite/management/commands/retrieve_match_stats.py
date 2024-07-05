@@ -1,8 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from haloinfinite.models import Match, XBoxUser
-from haloinfinite.services import SpnkrService
-
-import asyncio
+from haloinfinite.services import RefreshMatchStats
 
 class Command(BaseCommand):
   help = "Retrieve a user's match stats"
@@ -17,8 +15,4 @@ class Command(BaseCommand):
     except XBoxUser.DoesNotExist:
       raise CommandError(f"XBoxUser {xbox_user_id} does not exist")
     
-    matches = Match.objects.filter(stats_retrieved=False)
-    print(f"Retrieving stats for {len(matches)} matches")
-    
-    spnkr = SpnkrService(xbox_user)
-    asyncio.run(spnkr.refresh_match_stats(matches))
+    RefreshMatchStats(xbox_user).run()
