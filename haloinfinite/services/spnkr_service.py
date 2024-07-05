@@ -124,7 +124,7 @@ class SpnkrService:
         requests_per_second=5
       )
 
-      response = await client.skill.get_match_skill(match_id=match.external_id, xuids=[self.xbox_user.xuid])
+      response = await client.skill.get_match_skill(match_id=match_id, xuids=[self.xbox_user.xuid])
       parsed = await response.parse()
 
       return parsed
