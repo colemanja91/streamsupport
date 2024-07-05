@@ -2,8 +2,6 @@ from django.core.management.base import BaseCommand, CommandError
 from haloinfinite.models import XBoxUser
 from haloinfinite.services import RefreshServiceRecord
 
-import asyncio
-
 class Command(BaseCommand):
   help = "Refresh a user's service record"
 
