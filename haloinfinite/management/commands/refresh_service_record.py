@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from haloinfinite.models import XBoxUser
-from haloinfinite.services import SpnkrService
+from haloinfinite.services import RefreshServiceRecord
 
 import asyncio
 
@@ -17,5 +17,4 @@ class Command(BaseCommand):
     except XBoxUser.DoesNotExist:
       raise CommandError(f"XBoxUser {xbox_user_id} does not exist")
     
-    spnkr = SpnkrService(xbox_user)
-    asyncio.run(spnkr.refresh_service_record())
+    RefreshServiceRecord(xbox_user).run()

@@ -59,12 +59,8 @@ class SpnkrService:
 
       response = await client.stats.get_service_record(self.xbox_user.xuid)
       parsed = await response.parse()
-      self.servicerecord.wins=parsed.wins
-      self.servicerecord.losses=parsed.losses
-      self.servicerecord.ties=parsed.ties
-      self.servicerecord.matches_completed=parsed.matches_completed
-      self.servicerecord.time_played=parsed.time_played
-      await self.servicerecord.asave()
+    
+    return parsed
   
   async def refresh_matches(self) -> None:
     await self.refresh_tokens()
