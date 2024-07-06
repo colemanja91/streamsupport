@@ -128,3 +128,19 @@ class SpnkrService:
       parsed = await response.parse()
 
       return parsed
+  
+  async def get_playlist(self, asset_id, version_id):
+    await self.refresh_tokens()
+
+    async with ClientSession() as session:
+      client = HaloInfiniteClient(
+        session=session,
+        spartan_token=self.xbox_user.spartan_token,
+        clearance_token=self.xbox_user.clearance_id,
+        requests_per_second=5
+      )
+
+      response = await client.discovery_ugc.get_playlist(asset_id, version_id)
+      parsed = await response.parse()
+
+      return parsed
