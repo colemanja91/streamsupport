@@ -21,5 +21,6 @@ from haloinfinite.views import MatchListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('haloinfinite/', include('haloinfinite.urls'))
+    path('haloinfinite/', include('haloinfinite.urls')),
+    path('scheduler/', include('scheduler.urls'))
 ]

@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_tables2',
-    'haloinfinite.apps.HaloinfiniteConfig'
+    'haloinfinite.apps.HaloinfiniteConfig',
+    'scheduler'
 ]
 
 MIDDLEWARE = [
@@ -88,6 +89,16 @@ DATABASES = {
     }
 }
 
+SCHEDULER_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'USERNAME': getenv('REDIS_USERNAME'),
+        'PASSWORD': getenv('REDIS_PASSWORD'),
+        'DEFAULT_TIMEOUT': 360,
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
