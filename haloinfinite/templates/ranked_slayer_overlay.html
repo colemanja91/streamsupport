@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" crossorigin="" href="https://trackercdn.com/static-files/trackergg/production/dist/client/assets/CD_fTyBr.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,900|Teko:400,500,600&display=swap">
+  </head>
+
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="360" height="176"
+    viewBox="0 0 360 176" preview="false" platformInfo="[object Object]" titleSlug="halo-infinite"
+    standardSessions="[object Object]">
+    <defs>
+      <linearGradient id="linear-gradient" x1="0.5" y1="1" x2="0.5" gradientUnits="objectBoundingBox">
+        <stop offset="0" stop-color="#85D6FF" stop-opacity="0.5"></stop>
+        <stop offset="1" stop-color="#85D6FF" stop-opacity="0"></stop>
+      </linearGradient>
+    </defs>
+    <g transform="translate(-40 -59)">
+      <rect data-name="bg-main" width="360" height="97" transform="translate(40 59)" fill="#000000" opacity="0.5"></rect>
+      <rect data-name="bg-featured" width="187" height="97" transform="translate(40 59)" fill="url(#linear-gradient)"></rect>
+      {% comment %} <image width="82" height="82" transform="translate(30 65)" xlink:href="{{ rank_icon }}"></image> {% endcomment %}
+      <text transform="translate(115 100)" font-weight="700">
+        <tspan x="0" y="12" fill="#FFFFFF" font-size="20" font-family="Rajdhani-Bold, Rajdhani">{{ rank }}</tspan>
+      </text>
+      <!-- TOP ROW -->
+      <text transform="translate(243 80)" font-weight="700">
+        <tspan x="0" y="0" fill="#85D6FF" font-size="12" font-family="Roboto-Bold, Roboto">MATCHES</tspan>
+        <tspan x="0" y="18" fill="#FFFFFF" font-size="20" font-family="Rajdhani-Bold, Rajdhani">{{ matches }}</tspan>
+      </text>
+      <text transform="translate(310 80)" font-weight="700">
+        <tspan x="0" y="0" fill="#85D6FF" font-size="12" font-family="Roboto-Bold, Roboto">WINS</tspan>
+        <tspan x="0" y="18" fill="#FFFFFF" font-size="20" font-family="Rajdhani-Bold, Rajdhani">{{ wins }}</tspan>
+      </text>
+      <text transform="translate(350 80)" font-weight="700">
+        <tspan x="0" y="0" fill="#85D6FF" font-size="12" font-family="Roboto-Bold, Roboto">K/D/A</tspan>
+        <tspan x="0" y="18" fill="#FFFFFF" font-size="20" font-family="Rajdhani-Bold, Rajdhani">{{ kda }}</tspan>
+      </text>
+      <!-- BOTTOM ROW -->
+      <text transform="translate(243 127)" font-weight="700">
+        <tspan x="0" y="0" fill="#85D6FF" font-size="12" font-family="Roboto-Bold, Roboto">ACCURACY</tspan>
+        <tspan x="0" y="18" fill="#FFFFFF" font-size="20" font-family="Rajdhani-Bold, Rajdhani">{{ accuracy }}%</tspan>
+      </text>
+      <text transform="translate(310 127)" font-weight="700">
+        <tspan x="0" y="0" fill="#85D6FF" font-size="12" font-family="Roboto-Bold, Roboto">MAX SPREE</tspan>
+        <tspan x="0" y="18" fill="#FFFFFF" font-size="20" font-family="Rajdhani-Bold, Rajdhani">{{ max_spree }}</tspan>
+      </text>
+      <g data-name="borders" fill="#85D6FF">
+        <rect width="2" height="80" transform="translate(40 71)"></rect>
+        <path d="M7349-362h-2v-8h2v6h328v2Z" transform="translate(-7307 518)" opacity="0.5"></path>
+        <path d="M7347-362v-8h330v2H7349v6Z" transform="translate(-7307 429)" opacity="0.5"></path>
+      </g>
+      <g data-name="arrows" fill="#85D6FF">
+        <path d="M6,0H0L6,6Z" transform="translate(394 61)"></path>
+        <path d="M6,6H0L6,0Z" transform="translate(394 150)"></path>
+      </g>
+    </g>
+  </svg>
+</html>
