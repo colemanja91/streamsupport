@@ -1,6 +1,33 @@
+from datetime import timedelta
 from django.db import models
+from django.db.models import DurationField, ExpressionWrapper, F
 from .playlist_asset import PlaylistAsset
 from .xbox_user import XBoxUser
+
+class MatchQuerySet(models.QuerySet):
+  def ranked_slayer(self):
+    return self.filter(playlist_asset__public_name='Ranked Slayer')
+  
+  def not_ended_early(self):
+    expression = F('end_time') - F('start_time')
+    wrapped = ExpressionWrapper(expression, DurationField())
+    delta = timedelta(minutes=3)
+    return self.annotate(match_duration=wrapped)\
+      .exclude(
+        outcome='1',
+        score=0,
+        match_duration__lte=delta
+      )
+
+class MatchManager(models.Manager):
+  def get_queryset(self):
+    return MatchQuerySet(self.model, using=self._db)
+  
+  def ranked_slayer(self):
+    return self.get_queryset().ranked_slayer()
+  
+  def not_ended_early(self):
+    return self.get_queryset().not_ended_early()
 
 class Match(models.Model):
   xbox_user = models.ForeignKey(XBoxUser, on_delete=models.CASCADE)
@@ -27,3 +54,5 @@ class Match(models.Model):
   pre_match_csr = models.IntegerField(default=0)
   post_match_csr = models.IntegerField(default=0)
   stats_retrieved = models.BooleanField(default=False)
+
+  objects = MatchManager()
