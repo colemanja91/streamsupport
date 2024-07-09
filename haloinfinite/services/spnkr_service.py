@@ -144,3 +144,19 @@ class SpnkrService:
       parsed = await response.parse()
 
       return parsed
+  
+  async def get_playlist_csr(self, asset_id):
+    await self.refresh_tokens()
+
+    async with ClientSession() as session:
+      client = HaloInfiniteClient(
+        session=session,
+        spartan_token=self.xbox_user.spartan_token,
+        clearance_token=self.xbox_user.clearance_id,
+        requests_per_second=5
+      )
+
+      response = await client.skill.get_playlist_csr(asset_id, [self.xbox_user.xuid])
+      parsed = await response.parse()
+
+      return parsed
