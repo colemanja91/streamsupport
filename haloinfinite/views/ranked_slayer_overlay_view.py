@@ -3,8 +3,8 @@ from django.shortcuts import render
 from django.db.models import Avg, Max, Sum
 from haloinfinite.models import Match, ServiceRecord, XBoxUser
 
-def ranked_slayer(request):
-  user = XBoxUser.objects.filter(gamertag='allienord').first()
+def ranked_slayer(request, gamertag):
+  user = XBoxUser.objects.filter(gamertag=gamertag).first()
   matches = Match.objects.not_ended_early().ranked_slayer().filter(xbox_user=user)
   kills = matches.aggregate(Sum('kills'))['kills__sum']
   deaths = matches.aggregate(Sum('deaths'))['deaths__sum']
