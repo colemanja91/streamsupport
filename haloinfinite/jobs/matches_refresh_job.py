@@ -1,5 +1,3 @@
-from scheduler import job
-
 from haloinfinite.models import XBoxUser
 from haloinfinite.services import RefreshMatches, RefreshMatchStats, RefreshPlaylistInfo
 
@@ -10,4 +8,4 @@ def run():
     RefreshMatchStats(user).run()
   
   # Only need to run this once
-  RefreshPlaylistInfo(user).run()
+  RefreshPlaylistInfo(users.first()).run()

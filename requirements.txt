@@ -15,6 +15,7 @@ django-annoying==0.10.6
 django-tables2==2.7.0
 django-tasks-scheduler==2.0.0
 frozenlist==1.4.1
+honcho==1.1.0
 idna==3.7
 msal==1.29.0
 multidict==6.0.5
