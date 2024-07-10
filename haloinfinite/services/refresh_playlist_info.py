@@ -17,5 +17,6 @@ class RefreshPlaylistInfo:
 
       asset.public_name = response.public_name
       asset.description = response.description
+      asset.external_order = response.order
       asset.save()
       print("Fetched!")
